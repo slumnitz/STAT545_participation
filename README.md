@@ -6,7 +6,7 @@ This repo represents my participation at the STATS 545 course.
 
 Class folder | Participation
 ------|--------------
-cm001 | introduced myself in an the [Discussion-Internal Issue](https://github.com/STAT545-UBC/Discussion-Internal/issues/2)
+cm001 | introduced myself in the [Discussion-Internal Issue](https://github.com/STAT545-UBC/Discussion-Internal/issues/2)
 cm002 | created this repository and edited some `.md` files
 cm003 | R script for R exploration
 cm004 | Rmd script for data frame exploration
