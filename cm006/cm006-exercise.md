@@ -266,12 +266,19 @@ a + geom_jitter(alpha=0.25)
 ![](cm006-exercise_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 4.  How does the grammar differ from a box plot or violin plot?
-    
-      - ANSWER:
-
+      - ANSWER: using `geom_violin()` vs `geom_boxplot()`
 5.  We can add multiple geom *layers* to our plot. Put a jitterplot
     overtop of the violin plot, starting with our base `b`. Try
     vice-versa.
+
+<!-- end list -->
+
+``` r
+a + geom_violin() +
+  geom_jitter(alpha=0.15)
+```
+
+![](cm006-exercise_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 6.  Optional: git stage and commit
 
@@ -295,14 +302,40 @@ over time.
 | statistical transform |               |
 
 2.  In one readable call, write code that:
-    
     1.  Filters the data to Canada only
     2.  Pipes the filtered data into `ggplot`
     3.  Makes the time plot of `lifeExp` over time
     4.  Also displays the points
 
+<!-- end list -->
+
+``` r
+gapminder %>% 
+  filter(country == "Canada") %>% 
+  ggplot(aes(year, lifeExp)) + 
+  geom_line() +
+  geom_point()
+```
+
+![](cm006-exercise_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
 3.  Attempt to overlay line plots for all countries. That is, repeat the
     above code, but don’t filter. What’s wrong here?
+
+<!-- end list -->
+
+``` r
+c <- ggplot(gapminder, aes(year, lifeExp))
+c + geom_line()
+```
+
+![](cm006-exercise_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+``` r
+c + geom_line(aes(group=country), alpha=0.2)
+```
+
+![](cm006-exercise_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
 
 4.  Use the `group` aesthetic to fix the problem.
 
