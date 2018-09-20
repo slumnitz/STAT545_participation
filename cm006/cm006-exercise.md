@@ -74,10 +74,8 @@ Notice the “metaprogramming” again\!
 <!-- end list -->
 
 ``` r
-ggplot(gapminder) + geom_point(aes(x=lifeExp, y =gdpPercap))
+# ggplot(gapminder, x=lifeExp, y =gdpPercap) + geom_point()
 ```
-
-![](cm006-exercise_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 5.  Put the x-axis on a log scale, first by transforming the x variable.
       - Note: `ggplot2` does some data wrangling and computations
@@ -106,6 +104,14 @@ ggplot(gapminder, aes(lifeExp, gdpPercap)) +
 7.  The aesthetic mappings can be specified on the geom layer if you
     want, instead of the main `ggplot` call. Give it a try:
 
+<!-- end list -->
+
+``` r
+ggplot(gapminder) + geom_point(aes(x=lifeExp, y =gdpPercap))
+```
+
+![](cm006-exercise_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
 8.  Optional: git stage and commit
 
 **Uses of a scatterplot**:
@@ -123,16 +129,48 @@ Let’s build a histogram of life expectancy.
 | Grammar Component     | Specification |
 | --------------------- | ------------- |
 | **data**              | `gapminder`   |
-| **aesthetic mapping** |               |
-| **geometric object**  |               |
-| scale                 |               |
-| statistical transform |               |
+| **aesthetic mapping** | `x`           |
+| **geometric object**  | histogram     |
+| scale                 | linear        |
+| statistical transform | none          |
 
 2.  Build the histogram of life expectancy.
 
+<!-- end list -->
+
+``` r
+ggplot(gapminder, aes(lifeExp)) + 
+  geom_histogram()
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+![](cm006-exercise_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
 3.  Change the number of bins to 50.
 
+<!-- end list -->
+
+``` r
+ggplot(gapminder, aes(lifeExp)) + 
+  geom_histogram(bins=50)
+```
+
+![](cm006-exercise_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
 4.  Instead of a histogram, let’s create a kernel density plot.
+
+<!-- end list -->
+
+``` r
+ggplot(gapminder, aes(lifeExp)) +
+  geom_histogram(aes(y = ..density..)) +
+  geom_density(bw=1)
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+![](cm006-exercise_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 5.  Optional: git stage and commit
 
@@ -147,23 +185,48 @@ much better on a log scale\!
 1.  Fill out the grammar components below. Again, bold *must* be
     specified to make a `ggplot2` plot.
 
-| Grammar Component     | Specification |
-| --------------------- | ------------- |
-| **data**              | `gapminder`   |
-| **aesthetic mapping** |               |
-| **geometric object**  |               |
-| scale                 |               |
-| statistical transform |               |
+| Grammar Component     | Specification    |
+| --------------------- | ---------------- |
+| **data**              | `gapminder`      |
+| **aesthetic mapping** | `x` and `y`      |
+| **geometric object**  | boxplot          |
+| scale                 | log-y            |
+| statistical transform | 5-number summary |
 
 2.  Initiate the `ggplot` call, with the log y scale, and store it in
     the variable `a`. Print out `a`.
 
+<!-- end list -->
+
+``` r
+a <- ggplot(gapminder, aes(continent, pop)) + 
+  scale_y_log10()
+a
+```
+
+![](cm006-exercise_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
 3.  Add the boxplot geom to `a`.
+
+<!-- end list -->
+
+``` r
+a + geom_boxplot()
+```
+
+![](cm006-exercise_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 4.  A violin plot is a kernel density on its side, made symmetric. Add
     that geom to `a`.
-    
       - What’s better here, boxplots or violin plots? Why?
+
+<!-- end list -->
+
+``` r
+a + geom_violin()
+```
+
+![](cm006-exercise_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 5.  Optional: git stage and commit
 
@@ -183,8 +246,24 @@ Let’s hold off on identifying the grammar.
 
 2.  Add the point geom to `b`. Why is this an ineffective plot?
 
+<!-- end list -->
+
+``` r
+a + geom_point(alpha=0.1)
+```
+
+![](cm006-exercise_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
 3.  A solution is to jitter the points. Add the jitter geom. Re-run the
     command a few times – does the plot change? Why?
+
+<!-- end list -->
+
+``` r
+a + geom_jitter(alpha=0.25)
+```
+
+![](cm006-exercise_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 4.  How does the grammar differ from a box plot or violin plot?
     
