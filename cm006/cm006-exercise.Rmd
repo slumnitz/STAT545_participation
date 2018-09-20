@@ -57,7 +57,7 @@ Notice the "metaprogramming" again!
 4. You _must_ remember to put the aesthetic mappings in the `aes` function! What happens if you forget?
 
 ```{r}
-ggplot(gapminder) + geom_point(aes(x=lifeExp, y =gdpPercap))
+# ggplot(gapminder, x=lifeExp, y =gdpPercap) + geom_point()
 ```
 
 
@@ -80,6 +80,10 @@ ggplot(gapminder, aes(lifeExp, gdpPercap)) +
 
 7. The aesthetic mappings can be specified on the geom layer if you want, instead of the main `ggplot` call. Give it a try:
 
+```{r}
+ggplot(gapminder) + geom_point(aes(x=lifeExp, y =gdpPercap))
+```
+
 
 8. Optional: git stage and commit
 
@@ -97,21 +101,34 @@ Let's build a histogram of life expectancy.
 | Grammar Component     | Specification |
 |-----------------------|---------------|
 | __data__              | `gapminder` |
-| __aesthetic mapping__ |  |
-| __geometric object__  |  |
-| scale                 |  |
-| statistical transform |  |
+| __aesthetic mapping__ |  `x`|
+| __geometric object__  |  histogram |
+| scale                 |  linear |
+| statistical transform |  none |
 
 2. Build the histogram of life expectancy.
 
+```{r}
+ggplot(gapminder, aes(lifeExp)) + 
+  geom_histogram()
+```
 
 
 3. Change the number of bins to 50.
 
+```{r}
+ggplot(gapminder, aes(lifeExp)) + 
+  geom_histogram(bins=50)
+```
 
 
 4. Instead of a histogram, let's create a kernel density plot.
 
+```{r}
+ggplot(gapminder, aes(lifeExp)) +
+  geom_histogram(aes(y = ..density..)) +
+  geom_density(bw=1)
+```
 
 
 5. Optional: git stage and commit
