@@ -79,13 +79,41 @@ ggplot(gapminder, aes(lifeExp)) +
 
 Make histograms of `gdpPercap` for each continent. Try the `scales` and `ncol` arguments. 
 
+```{r}
+ggplot(gapminder, aes(lifeExp)) +
+  facet_wrap(~continent, scales = "free_x") +
+  geom_histogram()
+```
+
+
 Remove Oceania. Add another variable: `lifeExp > 60`. 
+
+```{r}
+ggplot(gapminder, aes(gdpPercap)) +
+  facet_grid(continent~lifeExp>60) +
+  geom_histogram()
+```
+
 
 ## Bubble Plots
 
 - Add a `size` aesthetic to a scatterplot. What about `cex`?
+
+```{r}
+gvsl + geom_point(aes(size=pop), alpha=0.2) +
+  scale_size_area()
+```
+
+
 - Try adding `scale_radius()` and `scale_size_area()`. What's better?
 - Use `shape=21` to distinguish between `fill` (interior) and `colour` (exterior).
+
+
+```{r}
+# needs other shape than default
+gvsl + geom_point(aes(size=pop, fill=continent), shape=21, color="black", alpha=0.2)
+```
+
 
 ## "Complete" plot
 
@@ -94,6 +122,12 @@ Let's try plotting much of the data.
 - gdpPercap vs lifeExp with pop bubbles
 - facet by year
 - colour by continent
+
+```{r}
+gvsl + geom_point(aes(size=pop, color=continent)) + 
+  scale_size_area() +
+  facet_wrap(~year)
+```
 
 
 
