@@ -60,7 +60,9 @@ These functions we've seen are called __vectorized functions__.
 Use `summarize()` to compute the mean and median life expectancy using all entries:
 
 ```{r}
-
+gapminder %>% 
+  summarise(mu=mean(lifeExp),
+            md=median(lifeExp))
 ```
 
 Do the same thing, but try:
@@ -69,7 +71,16 @@ Do the same thing, but try:
 2. grouping by continent and country
 
 ```{r}
-
+gapminder %>% 
+    group_by(country) %>% 
+    summarise(mu=mean(lifeExp),
+              md=median(lifeExp))
+gapminder %>% 
+    group_by(continent, country) %>% 
+    summarise(mu=mean(lifeExp),
+              md=median(lifeExp))
+gapminder %>% 
+    group_by(continent, country)
 ```
 
 - Notice the columns that are kept. 
@@ -81,26 +92,49 @@ Question: What if I wanted to keep the other numeric columns (gdpPercap, pop)? C
 For each continent: What is the smallest country-wide median GDP per capita?
 
 ```{r}
-
+gapminder %>% 
+    group_by(continent, country) %>% 
+    summarise(md=median(gdpPercap)) %>% 
+    summarise(min(md))
 ```
 
 Note that ggplot2's grouping is different from dplyr's! Try making a spaghetti plot of lifeExp over time for each coutry, by piping in a grouped data frame -- it won't work:
 
-```{r}
-
+```{r} 
+# correct solution
+gapminder %>% 
+    ggplot(aes(year, lifeExp, group=country)) +
+    geom_line()
 ```
 
 
 Your turn! For each continent, what is the median GDP per capita of countries with high (>60) life expectancy vs countries with low (<=60)? Sort this data frame by median GDP per capita.
 
 ```{r}
+gapminder %>% 
+    mutate(hvsl = if_else(lifeExp > 60, "high", "low")) %>% 
+    #group_by(continent, lifeExp > 60) %>%
+    group_by(continent, hvsl) %>% 
+    summarize(md = median(gdpPercap)) %>% 
+    arrange(md)
 
+gapminder %>% 
+    mutate(age = if_else(lifeExp > 60, "high", "low")) %>% 
+    group_by(continent, age) %>%
+    summarize(md = median(gdpPercap))
 ```
 
 There are special functions to summarize by. Let's see some of them:
 
 - `n()`: Number of rows in the group.
 - `n_distinct()`
+
+```{r}
+gapminder %>% 
+    group_by(continent) %>% 
+    summarize(num = n())
+```
+
 
 Convenience functions:
 
@@ -110,7 +144,11 @@ Convenience functions:
 n_distinct: How many years of record does each country have?
 
 ```{r}
-
+gapminder %>% 
+    group_by(continent) %>% 
+    tally()
+gapminder %>% 
+    count(continent)
 ```
 
 count

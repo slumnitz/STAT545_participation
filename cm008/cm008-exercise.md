@@ -149,12 +149,89 @@ These functions we’ve seen are called **vectorized functions**.
 Use `summarize()` to compute the mean and median life expectancy using
 all entries:
 
+``` r
+gapminder %>% 
+  summarise(mu=mean(lifeExp),
+            md=median(lifeExp))
+```
+
+    ## # A tibble: 1 x 2
+    ##      mu    md
+    ##   <dbl> <dbl>
+    ## 1  59.5  60.7
+
 Do the same thing, but try:
 
 1.  grouping by country
 2.  grouping by continent and country
 
 <!-- end list -->
+
+``` r
+gapminder %>% 
+    group_by(country) %>% 
+    summarise(mu=mean(lifeExp),
+              md=median(lifeExp))
+```
+
+    ## # A tibble: 142 x 3
+    ##    country        mu    md
+    ##    <fct>       <dbl> <dbl>
+    ##  1 Afghanistan  37.5  39.1
+    ##  2 Albania      68.4  69.7
+    ##  3 Algeria      59.0  59.7
+    ##  4 Angola       37.9  39.7
+    ##  5 Argentina    69.1  69.2
+    ##  6 Australia    74.7  74.1
+    ##  7 Austria      73.1  72.7
+    ##  8 Bahrain      65.6  67.3
+    ##  9 Bangladesh   49.8  48.5
+    ## 10 Belgium      73.6  73.4
+    ## # ... with 132 more rows
+
+``` r
+gapminder %>% 
+    group_by(continent, country) %>% 
+    summarise(mu=mean(lifeExp),
+              md=median(lifeExp))
+```
+
+    ## # A tibble: 142 x 4
+    ## # Groups:   continent [?]
+    ##    continent country                     mu    md
+    ##    <fct>     <fct>                    <dbl> <dbl>
+    ##  1 Africa    Algeria                   59.0  59.7
+    ##  2 Africa    Angola                    37.9  39.7
+    ##  3 Africa    Benin                     48.8  50.0
+    ##  4 Africa    Botswana                  54.6  52.9
+    ##  5 Africa    Burkina Faso              44.7  47.1
+    ##  6 Africa    Burundi                   44.8  45.0
+    ##  7 Africa    Cameroon                  48.1  49.6
+    ##  8 Africa    Central African Republic  43.9  44.1
+    ##  9 Africa    Chad                      46.8  48.4
+    ## 10 Africa    Comoros                   52.4  51.9
+    ## # ... with 132 more rows
+
+``` r
+gapminder %>% 
+    group_by(continent, country)
+```
+
+    ## # A tibble: 1,704 x 6
+    ## # Groups:   continent, country [142]
+    ##    country     continent  year lifeExp      pop gdpPercap
+    ##    <fct>       <fct>     <int>   <dbl>    <int>     <dbl>
+    ##  1 Afghanistan Asia       1952    28.8  8425333      779.
+    ##  2 Afghanistan Asia       1957    30.3  9240934      821.
+    ##  3 Afghanistan Asia       1962    32.0 10267083      853.
+    ##  4 Afghanistan Asia       1967    34.0 11537966      836.
+    ##  5 Afghanistan Asia       1972    36.1 13079460      740.
+    ##  6 Afghanistan Asia       1977    38.4 14880372      786.
+    ##  7 Afghanistan Asia       1982    39.9 12881816      978.
+    ##  8 Afghanistan Asia       1987    40.8 13867957      852.
+    ##  9 Afghanistan Asia       1992    41.7 16317921      649.
+    ## 10 Afghanistan Asia       1997    41.8 22227415      635.
+    ## # ... with 1,694 more rows
 
   - Notice the columns that are kept.
   - Notice the grouping listed above the tibble, especially without a
@@ -167,18 +244,104 @@ pop)? Can I? Would this even make sense?
 For each continent: What is the smallest country-wide median GDP per
 capita?
 
+``` r
+gapminder %>% 
+    group_by(continent, country) %>% 
+    summarise(md=median(gdpPercap)) %>% 
+    summarise(min(md))
+```
+
+    ## # A tibble: 5 x 2
+    ##   continent `min(md)`
+    ##   <fct>         <dbl>
+    ## 1 Africa         455.
+    ## 2 Americas      1691.
+    ## 3 Asia           378 
+    ## 4 Europe        3194.
+    ## 5 Oceania      16933.
+
 Note that ggplot2’s grouping is different from dplyr’s\! Try making a
 spaghetti plot of lifeExp over time for each coutry, by piping in a
 grouped data frame – it won’t work:
+
+``` r
+# correct solution
+gapminder %>% 
+    ggplot(aes(year, lifeExp, group=country)) +
+    geom_line()
+```
+
+![](cm008-exercise_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 Your turn\! For each continent, what is the median GDP per capita of
 countries with high (\>60) life expectancy vs countries with low
 (\<=60)? Sort this data frame by median GDP per capita.
 
+``` r
+gapminder %>% 
+    mutate(hvsl = if_else(lifeExp > 60, "high", "low")) %>% 
+    #group_by(continent, lifeExp > 60) %>%
+    group_by(continent, hvsl) %>% 
+    summarize(md = median(gdpPercap)) %>% 
+    arrange(md)
+```
+
+    ## # A tibble: 9 x 3
+    ## # Groups:   continent [5]
+    ##   continent hvsl      md
+    ##   <fct>     <chr>  <dbl>
+    ## 1 Asia      low    1031.
+    ## 2 Africa    low    1071.
+    ## 3 Europe    low    2384.
+    ## 4 Americas  low    3080.
+    ## 5 Africa    high   4442.
+    ## 6 Asia      high   5250.
+    ## 7 Americas  high   6678.
+    ## 8 Europe    high  12672.
+    ## 9 Oceania   high  17983.
+
+``` r
+gapminder %>% 
+    mutate(age = if_else(lifeExp > 60, "high", "low")) %>% 
+    group_by(continent, age) %>%
+    summarize(md = median(gdpPercap))
+```
+
+    ## # A tibble: 9 x 3
+    ## # Groups:   continent [?]
+    ##   continent age       md
+    ##   <fct>     <chr>  <dbl>
+    ## 1 Africa    high   4442.
+    ## 2 Africa    low    1071.
+    ## 3 Americas  high   6678.
+    ## 4 Americas  low    3080.
+    ## 5 Asia      high   5250.
+    ## 6 Asia      low    1031.
+    ## 7 Europe    high  12672.
+    ## 8 Europe    low    2384.
+    ## 9 Oceania   high  17983.
+
 There are special functions to summarize by. Let’s see some of them:
 
   - `n()`: Number of rows in the group.
   - `n_distinct()`
+
+<!-- end list -->
+
+``` r
+gapminder %>% 
+    group_by(continent) %>% 
+    summarize(num = n())
+```
+
+    ## # A tibble: 5 x 2
+    ##   continent   num
+    ##   <fct>     <int>
+    ## 1 Africa      624
+    ## 2 Americas    300
+    ## 3 Asia        396
+    ## 4 Europe      360
+    ## 5 Oceania      24
 
 Convenience functions:
 
@@ -186,6 +349,35 @@ Convenience functions:
   - `count(...)` (= `group_by(...) %>% tally()`)
 
 n\_distinct: How many years of record does each country have?
+
+``` r
+gapminder %>% 
+    group_by(continent) %>% 
+    tally()
+```
+
+    ## # A tibble: 5 x 2
+    ##   continent     n
+    ##   <fct>     <int>
+    ## 1 Africa      624
+    ## 2 Americas    300
+    ## 3 Asia        396
+    ## 4 Europe      360
+    ## 5 Oceania      24
+
+``` r
+gapminder %>% 
+    count(continent)
+```
+
+    ## # A tibble: 5 x 2
+    ##   continent     n
+    ##   <fct>     <int>
+    ## 1 Africa      624
+    ## 2 Americas    300
+    ## 3 Asia        396
+    ## 4 Europe      360
+    ## 5 Oceania      24
 
 count
 
