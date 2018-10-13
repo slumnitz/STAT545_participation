@@ -190,17 +190,121 @@ colnames(weather)
 ``` r
 flights2 <- flights[1:1000,] %>% 
   select(year, tailnum, carrier, time_hour)
+flights2
 ```
+
+    ## # A tibble: 1,000 x 4
+    ##     year tailnum carrier time_hour          
+    ##    <int> <chr>   <chr>   <dttm>             
+    ##  1  2013 N14228  UA      2013-01-01 05:00:00
+    ##  2  2013 N24211  UA      2013-01-01 05:00:00
+    ##  3  2013 N619AA  AA      2013-01-01 05:00:00
+    ##  4  2013 N804JB  B6      2013-01-01 05:00:00
+    ##  5  2013 N668DN  DL      2013-01-01 06:00:00
+    ##  6  2013 N39463  UA      2013-01-01 05:00:00
+    ##  7  2013 N516JB  B6      2013-01-01 06:00:00
+    ##  8  2013 N829AS  EV      2013-01-01 06:00:00
+    ##  9  2013 N593JB  B6      2013-01-01 06:00:00
+    ## 10  2013 N3ALAA  AA      2013-01-01 06:00:00
+    ## # ... with 990 more rows
+
+``` r
+dim(flights2)
+```
+
+    ## [1] 1000    4
 
 ### 3\. Add airline names to `flights2` from `airlines` dataset.
 
 ``` r
 # Which join function to use?
+colnames(airlines)
 ```
+
+    ## [1] "carrier" "name"
+
+``` r
+colnames(flights2)
+```
+
+    ## [1] "year"      "tailnum"   "carrier"   "time_hour"
+
+``` r
+left_join(flights2, airlines)
+```
+
+    ## Joining, by = "carrier"
+
+    ## # A tibble: 1,000 x 5
+    ##     year tailnum carrier time_hour           name                    
+    ##    <int> <chr>   <chr>   <dttm>              <chr>                   
+    ##  1  2013 N14228  UA      2013-01-01 05:00:00 United Air Lines Inc.   
+    ##  2  2013 N24211  UA      2013-01-01 05:00:00 United Air Lines Inc.   
+    ##  3  2013 N619AA  AA      2013-01-01 05:00:00 American Airlines Inc.  
+    ##  4  2013 N804JB  B6      2013-01-01 05:00:00 JetBlue Airways         
+    ##  5  2013 N668DN  DL      2013-01-01 06:00:00 Delta Air Lines Inc.    
+    ##  6  2013 N39463  UA      2013-01-01 05:00:00 United Air Lines Inc.   
+    ##  7  2013 N516JB  B6      2013-01-01 06:00:00 JetBlue Airways         
+    ##  8  2013 N829AS  EV      2013-01-01 06:00:00 ExpressJet Airlines Inc.
+    ##  9  2013 N593JB  B6      2013-01-01 06:00:00 JetBlue Airways         
+    ## 10  2013 N3ALAA  AA      2013-01-01 06:00:00 American Airlines Inc.  
+    ## # ... with 990 more rows
 
 ### 4\. Add `weather` information to the `flights2` dataset by matching “year” and “time\_hour” variables.
 
+``` r
+colnames(weather)
+```
+
+    ##  [1] "origin"     "year"       "month"      "day"        "hour"      
+    ##  [6] "temp"       "dewp"       "humid"      "wind_dir"   "wind_speed"
+    ## [11] "wind_gust"  "precip"     "pressure"   "visib"      "time_hour"
+
+``` r
+flights2 %>%
+  left_join(weather, by = c("year", "time_hour"))
+```
+
+    ## # A tibble: 2,888 x 17
+    ##     year tailnum carrier time_hour           origin month   day  hour  temp
+    ##    <dbl> <chr>   <chr>   <dttm>              <chr>  <dbl> <int> <int> <dbl>
+    ##  1  2013 N14228  UA      2013-01-01 05:00:00 EWR        1     1     5  39.0
+    ##  2  2013 N14228  UA      2013-01-01 05:00:00 JFK        1     1     5  39.0
+    ##  3  2013 N14228  UA      2013-01-01 05:00:00 LGA        1     1     5  39.9
+    ##  4  2013 N24211  UA      2013-01-01 05:00:00 EWR        1     1     5  39.0
+    ##  5  2013 N24211  UA      2013-01-01 05:00:00 JFK        1     1     5  39.0
+    ##  6  2013 N24211  UA      2013-01-01 05:00:00 LGA        1     1     5  39.9
+    ##  7  2013 N619AA  AA      2013-01-01 05:00:00 EWR        1     1     5  39.0
+    ##  8  2013 N619AA  AA      2013-01-01 05:00:00 JFK        1     1     5  39.0
+    ##  9  2013 N619AA  AA      2013-01-01 05:00:00 LGA        1     1     5  39.9
+    ## 10  2013 N804JB  B6      2013-01-01 05:00:00 EWR        1     1     5  39.0
+    ## # ... with 2,878 more rows, and 8 more variables: dewp <dbl>, humid <dbl>,
+    ## #   wind_dir <dbl>, wind_speed <dbl>, wind_gust <dbl>, precip <dbl>,
+    ## #   pressure <dbl>, visib <dbl>
+
 ### 5\. Add `weather` information to the `flights2` dataset by matching only “time\_hour” variable
+
+``` r
+flights2 %>%
+  left_join(weather, by = c("time_hour"))
+```
+
+    ## # A tibble: 2,888 x 18
+    ##    year.x tailnum carrier time_hour           origin year.y month   day
+    ##     <int> <chr>   <chr>   <dttm>              <chr>   <dbl> <dbl> <int>
+    ##  1   2013 N14228  UA      2013-01-01 05:00:00 EWR      2013     1     1
+    ##  2   2013 N14228  UA      2013-01-01 05:00:00 JFK      2013     1     1
+    ##  3   2013 N14228  UA      2013-01-01 05:00:00 LGA      2013     1     1
+    ##  4   2013 N24211  UA      2013-01-01 05:00:00 EWR      2013     1     1
+    ##  5   2013 N24211  UA      2013-01-01 05:00:00 JFK      2013     1     1
+    ##  6   2013 N24211  UA      2013-01-01 05:00:00 LGA      2013     1     1
+    ##  7   2013 N619AA  AA      2013-01-01 05:00:00 EWR      2013     1     1
+    ##  8   2013 N619AA  AA      2013-01-01 05:00:00 JFK      2013     1     1
+    ##  9   2013 N619AA  AA      2013-01-01 05:00:00 LGA      2013     1     1
+    ## 10   2013 N804JB  B6      2013-01-01 05:00:00 EWR      2013     1     1
+    ## # ... with 2,878 more rows, and 10 more variables: hour <int>, temp <dbl>,
+    ## #   dewp <dbl>, humid <dbl>, wind_dir <dbl>, wind_speed <dbl>,
+    ## #   wind_gust <dbl>, precip <dbl>, pressure <dbl>, visib <dbl>
 
 ## Types of filtering join
 
