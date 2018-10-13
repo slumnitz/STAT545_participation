@@ -27,33 +27,46 @@ suppressPackageStartupMessages(library(nycflights13))
 
 ### left_join: Join matching rows from `b` to `a` by matching "x1" variable
 
-
+```{r}
+left_join(a,b,by = "x1")
+```
 
 ### right_join: Join matching rows from `a` to `b` by matching "x1" variable.
 
-
+```{r}
+right_join(a,b,by = "x1")
+```
 
 ### inner_join: Join data. Retain only rows in both sets `a` to `b` by matching "x1" variable.
 
-
+```{r}
+inner_join(a, b, by="x1")
+```
 
 ### full_join: Join data. Retain all values, all rows of `a` to `b` by matching "x1"
 
-
+```{r}
+full_join(a,b, by="x1")
+```
 
 ### what happen if we do not specify `by` option?
 
-
+```{r}
+left_join(a,b)
+```
 
 ### what happen if we join two different variables (e.g., "x1" to "x3") from two tibbles `a` to `b`?
 
-
+```{r}
+left_join(a,b, by= c("x1" = "x3"))
+```
 
 ### what happen if two columns of `a` and `c` datasets have the identical colnames?
 
 ```{r}
 # make data frame c and use inner_join()
 (c <- tibble(x1 = c(LETTERS[1:2],"x"), x2 = c(1,4,5)))
+left_join(a,c)
 ```
 
 ## In class practice

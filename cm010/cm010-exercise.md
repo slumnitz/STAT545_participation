@@ -42,15 +42,83 @@ suppressPackageStartupMessages(library(nycflights13))
 
 ### left\_join: Join matching rows from `b` to `a` by matching “x1” variable
 
+``` r
+left_join(a,b,by = "x1")
+```
+
+    ## # A tibble: 3 x 3
+    ##   x1       x2 x3   
+    ##   <chr> <int> <chr>
+    ## 1 A         1 T    
+    ## 2 B         2 F    
+    ## 3 C         3 <NA>
+
 ### right\_join: Join matching rows from `a` to `b` by matching “x1” variable.
+
+``` r
+right_join(a,b,by = "x1")
+```
+
+    ## # A tibble: 3 x 3
+    ##   x1       x2 x3   
+    ##   <chr> <int> <chr>
+    ## 1 A         1 T    
+    ## 2 B         2 F    
+    ## 3 D        NA T
 
 ### inner\_join: Join data. Retain only rows in both sets `a` to `b` by matching “x1” variable.
 
+``` r
+inner_join(a, b, by="x1")
+```
+
+    ## # A tibble: 2 x 3
+    ##   x1       x2 x3   
+    ##   <chr> <int> <chr>
+    ## 1 A         1 T    
+    ## 2 B         2 F
+
 ### full\_join: Join data. Retain all values, all rows of `a` to `b` by matching “x1”
+
+``` r
+full_join(a,b, by="x1")
+```
+
+    ## # A tibble: 4 x 3
+    ##   x1       x2 x3   
+    ##   <chr> <int> <chr>
+    ## 1 A         1 T    
+    ## 2 B         2 F    
+    ## 3 C         3 <NA> 
+    ## 4 D        NA T
 
 ### what happen if we do not specify `by` option?
 
+``` r
+left_join(a,b)
+```
+
+    ## Joining, by = "x1"
+
+    ## # A tibble: 3 x 3
+    ##   x1       x2 x3   
+    ##   <chr> <int> <chr>
+    ## 1 A         1 T    
+    ## 2 B         2 F    
+    ## 3 C         3 <NA>
+
 ### what happen if we join two different variables (e.g., “x1” to “x3”) from two tibbles `a` to `b`?
+
+``` r
+left_join(a,b, by= c("x1" = "x3"))
+```
+
+    ## # A tibble: 3 x 3
+    ##   x1       x2 x1.y 
+    ##   <chr> <int> <chr>
+    ## 1 A         1 <NA> 
+    ## 2 B         2 <NA> 
+    ## 3 C         3 <NA>
 
 ### what happen if two columns of `a` and `c` datasets have the identical colnames?
 
@@ -65,6 +133,19 @@ suppressPackageStartupMessages(library(nycflights13))
     ## 1 A         1
     ## 2 B         4
     ## 3 x         5
+
+``` r
+left_join(a,c)
+```
+
+    ## Joining, by = c("x1", "x2")
+
+    ## # A tibble: 3 x 2
+    ##   x1       x2
+    ##   <chr> <dbl>
+    ## 1 A         1
+    ## 2 B         2
+    ## 3 C         3
 
 ## In class practice
 
