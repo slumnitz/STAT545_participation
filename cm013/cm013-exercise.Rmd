@@ -6,6 +6,7 @@ output:
     df_print: paged
 editor_options:
   chunk_output_type: inline
+always_allow_html: yes
 ---
 
 ```{r}
@@ -174,9 +175,9 @@ ggplotly(p)
     - NOTE: plotly graphs don't seem to show up in Rmd _notebooks_, but they do with Rmd _documents_.
 
 ```{r}
-p %>% 
-    ggplotly() %>% 
-    htmlwidgets::saveWidget("cm013-exercise_files/plotly.html")
+# p %>% 
+#    ggplotly() %>% 
+#    htmlwidgets::saveWidget("cm013-exercise_files/plotly.html")
 ```
 
 
