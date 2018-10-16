@@ -122,7 +122,8 @@ ggplot(iris, aes(Sepal.Width, Sepal.Length)) +
      geom_point() +
      labs(x = "Sepal Width",
           y = "Sepal Length",
-          title = "Sepal sizes of three plant species")
+          title = "Sepal sizes of three plant species") +
+     theme_bw()
 ```
 
 2. Then, change font size of axis labels, and the strip background colour. Others?
@@ -135,8 +136,9 @@ ggplot(iris, aes(Sepal.Width, Sepal.Length)) +
           y = "Sepal Length",
           title = "Sepal sizes of three plant species") +
     theme_bw() +
-    theme(FILL_IN_ARG_FOR_AXIS_TITLE = FILL_THIS_IN,
-          strip.background = FILL_THIS_IN)
+    theme(axis.text = element_text(size = 16)  ,
+          strip.background = element_rect(fill = "orange"),
+          panel.background = element_rect(fill = "grey")) # change aspects of plot in theme()
 ```
 
 
@@ -164,7 +166,8 @@ Consider the following plot:
 1. Convert it to a `plotly` object by applying the `ggplotly()` function:
 
 ```{r}
-FILL_THIS_IN
+library(plotly)
+ggplotly(p)
 ```
 
 2. You can save a plotly graph locally as an html file. Try saving the above:
@@ -173,7 +176,7 @@ FILL_THIS_IN
 ```{r}
 p %>% 
     ggplotly() %>% 
-    htmlwidgets::saveWidget("LOCATION_GOES_HERE")
+    htmlwidgets::saveWidget("cm013-exercise_files/plotly.html")
 ```
 
 
@@ -205,7 +208,7 @@ plot_ly(gapminder,
 plot_ly(gapminder, 
         x = ~gdpPercap, 
         y = ~lifeExp, 
-        z = FILL_THIS_IN,
+        z = ~pop,
         type = "scatter3d",
         mode = "markers",
         opacity = 0.2)
