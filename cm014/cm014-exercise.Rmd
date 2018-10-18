@@ -1,7 +1,9 @@
 ---
-title: "cm014 Worksheet: The Model-Fitting Paradigm in R"
-output: html_notebook
-editor_options: 
+title: 'cm014 Worksheet: The Model-Fitting Paradigm in R'
+output:
+  html_document:
+    df_print: paged
+editor_options:
   chunk_output_type: inline
 ---
 
@@ -133,5 +135,14 @@ Let's make it easier to extract info, using the `broom` package. There are three
 Exercise: apply all three functions to our fitted model, `my_lm`. What do you see?
 
 ```{r}
-
+tidy(my_lm)
+augment(my_lm, newdata=tibble(gdpPercap=c(400, 500, 600)))
+glance(my_lm)
 ```
+
+
+*tidy*: Use to interpret how variables relate to each other. Model parameters are slope and intercep. And p-value for hypothesis testing.
+
+*augment*: new predicted values
+
+*glance*: the closer R-square to one the more x influences y. P-value significance to predict y wihtout using x, the smaller the more significant.
