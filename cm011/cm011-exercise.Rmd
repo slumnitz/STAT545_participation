@@ -137,34 +137,42 @@ a ^ 2
 Multiply each component by 1 through its length:
 
 ```{r}
-
+a * 1:10
 ```
 
 It's important to know that R will silently recycle! Unless the length of one vector is not divisible by the other. Let's see:
 
 ```{r}
-
+a * 1:3
+a * 1:2
+"hi" * 2
 ```
 
 
 This is true of comparison operators, too. Make a vector of logicals using a comparison operator.
 
 ```{r}
-
+a > 0
 ```
 
 
 Now try a boolean operator. Note that && and || are NOT vectorized!
 
 ```{r}
-
+a < 5
+a > 0 & a < 5
+a > 0 && a < 5
+# Use functions "all" or "any" to reduce a vector of non-1 length.
+any(a > 0 & a < 5)
+all(a > 0 & a < 5)
 ```
 
 
 Recycling works with assignment, too. Replace the entire vector a with 1:2 repeated:
 
 ```{r}
-
+a[1:n] <- 1:2
+a
 ```
 
 
