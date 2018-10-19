@@ -47,12 +47,14 @@ str(lotr2)
 Examples of problems encountered with factors. (ideas came from [R Bloggers](https://www.r-bloggers.com/factors-are-not-first-class-citizens-in-r/))
 
 ```{r}
+head(iris)
 iris %>% 
   mutate(Species = ifelse(Species == "versicolor", "vers", Species))
 ```
 
 ```{r}
 c(iris$Species, "setosa")
+as.character(iris$Species)
 ```
 
 
@@ -72,7 +74,12 @@ set.seed(10)
 Convert `draw` to a factor. What are the levels? How many are there? How many of each category was drawn?
 
 ```{r}
-
+draw <- factor(draw)
+draw
+levels(draw)
+levels(draw) %>% is.factor()
+nlevels(draw)
+fct_count(draw)
 ```
 
 
