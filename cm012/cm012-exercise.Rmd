@@ -1,6 +1,8 @@
 ---
-title: "cm012 Exercises: Factors"
-output: html_notebook
+title: 'cm012 Exercises: Factors'
+output:
+  pdf_document: default
+  html_notebook: default
 editor_options:
   chunk_output_type: inline
 ---
@@ -239,13 +241,13 @@ gapminder %>%
 
 What if we have two variables plus a non-positional categorical variable? Example: Life expectancy for some select countries. Want legend "ordered by life expectancy" -- but what does that mean?
 
-```{r}
+```{r, fig.width=4, fig.height=2}
 select_countries <- c("Sweden", "Denmark", "Norway", "Germany", "Austria")
 gap_select <- gapminder %>% 
   filter(country %in% select_countries) %>% 
   droplevels()
 ggplot(gap_select, aes(year, lifeExp)) +
-  geom_line(aes(group=country, colour=country))
+  geom_line(aes(colour=country))
 ```
 
 Use `fct_reorder2(f, x, y)` to reorder factor `f`:
@@ -255,8 +257,11 @@ Use `fct_reorder2(f, x, y)` to reorder factor `f`:
 
 Exercise: Reorder the above line graph so that the legend is in order of last life expectancy. Useful for black-and-white printing!
 
-```{r, fig.width=2, fig.height=1}
-
+```{r, fig.width=4, fig.height=2}
+gap_select %>% 
+    mutate(country = fct_reorder2(country, year, lifeExp)) %>% 
+    ggplot(aes(year, lifeExp)) +
+    geom_line(aes(colour=country))
 ```
 
 ### Ordering "because I said so"
@@ -270,7 +275,7 @@ Here's how to use `fct_relevel()` to do that. Exercise: modify the code so that:
 
 ```{r}
 gap_asia_2007$country %>% 
-  fct_relevel("Syria") %>% 
+  fct_relevel("Syria", "Sweden", after=2) %>% 
   levels() %>% 
   head()
 ```
@@ -297,11 +302,12 @@ We can specify levels to combine. Let's look at the world in 2007:
 ```{r}
 gap_2007 <- gapminder %>% 
   filter(year == 2007)
+gap_2007
 ```
 
 We can arbitrarily combine levels using `fct_collapse()`. For example, combine Europe and Asia into one factor called "combo":
 
-```{r, fig.width=2, fig.height=1}
+```{r, fig.width=4, fig.height=1}
 cont %>% 
   fct_collapse("combo" = c("Europe", "Asia")) %>% 
   qplot()
@@ -315,7 +321,9 @@ More practically, we can lump the least frequent levels together as "Other". Mod
 - Note: you can manually specify non-other levels using `fct_other()`.
 
 ```{r, fig.width=2, fig.height=1}
-
+cont %>% 
+  fct_lump() %>% 
+  qplot()
 ```
 
 We can use the `w` argument to lump by another variable.
@@ -325,7 +333,7 @@ Exercise: Modify the following violin plot of life expectancies of African count
 1. There are 4 "violins" corresponding to countries with the highest lifeExp.
 2. There are 4 "violins" corresponding to countries with the highest gdpPercap
 
-```{r, fig.width=2, fig.height=1}
+```{r, fig.width=4, fig.height=2}
 gap_africa <- gapminder %>% 
     filter(continent == "Africa")
 gap_africa %>% 
@@ -373,7 +381,8 @@ Goal here: some exposure to `lubridate`; know it exists.
 1. Use different combinations of y, m, d to make a date time object.
 
 ```{r}
-
+lubridate::ymd(170511)
+lubridate::ymd("2017-May-11")
 ```
 
 2. Get `year`, `month`, `yday`, `wday`, `day`.
