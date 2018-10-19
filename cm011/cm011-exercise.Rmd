@@ -1,6 +1,6 @@
 ---
 title: "cm011 Exercises: R as a programming language"
-output: github_notebook
+output: github_document
 ---
 
 # Part I
@@ -145,7 +145,7 @@ It's important to know that R will silently recycle! Unless the length of one ve
 ```{r}
 a * 1:3
 a * 1:2
-"hi" * 2
+# "hi" * 2
 ```
 
 
@@ -297,7 +297,7 @@ See what's in the Global Environment by:
 - Looking in RStudio, in the "Environments" pane.
 
 ```{r}
-
+ls()
 ```
 
 
