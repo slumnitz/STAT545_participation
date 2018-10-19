@@ -17,6 +17,6 @@ cm007 | Exploring Aesthetic Mappings
 [cm009](https://github.com/slumnitz/STAT545_participation/blob/master/cm009/cm009-exercise.Rmd) | tidy data
 [cm010](https://github.com/slumnitz/STAT545_participation/blob/master/cm010/cm010-exercise.md) | joins
 [cm011](https://github.com/slumnitz/STAT545_participation/blob/master/cm011/cm011-exercise.md) | R as a programming language
-cm012 |
+[cm012](https://github.com/slumnitz/STAT545_participation/blob/master/cm012/cm012-exercise.pdf) | Factors
 [cm013](https://github.com/slumnitz/STAT545_participation/blob/master/cm013/cm013-exercise.pdf) | ggsave and theming, plotly
 [cm014](https://github.com/slumnitz/STAT545_participation/blob/master/cm014/cm014-exercise.Rmd) | The Model-Fitting Paradigm in R
